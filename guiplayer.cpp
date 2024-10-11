@@ -777,21 +777,16 @@ void GUIPlayer::dragEnterEvent( QDragEnterEvent * event )
 
 void GUIPlayer::dropEvent( QDropEvent * event )
 {
-    if (event->mimeData()->hasText()) {
-        QStringList list, data;
-#if (QT_VERSION < QT_VERSION_CHECK(5,15,0))
-        data = event->mimeData()->text().split(QChar::LineFeed, QString::SkipEmptyParts);
-#else
-        data = event->mimeData()->text().split(QChar::LineFeed, Qt::SkipEmptyParts);
-#endif
-        foreach(const QString& fileName, data) {
-            QString localFileName = QUrl(fileName).toLocalFile();
+    if (event->mimeData()->hasUrls()) {
+        QStringList list;
+        foreach (const QUrl file, event->mimeData()->urls()) {
+            QString localFileName = file.toLocalFile();
             if ( isSupported(localFileName) ) {
                 list.append(localFileName);
             } else {
                 QMessageBox::warning(this,
                                      Settings::QSTR_APPNAME,
-                                     tr("Dropped file %1 is not supported").arg(fileName));
+                                     tr("Dropped file %1 is not supported").arg(localFileName));
             }
         }
         if (!list.isEmpty()) {
