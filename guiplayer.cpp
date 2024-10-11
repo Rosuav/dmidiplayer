@@ -933,6 +933,9 @@ void GUIPlayer::showEvent(QShowEvent *event)
         }
         int s = Settings::instance()->toolbarButtonStyle();
         m_ui->toolBar->setToolButtonStyle(static_cast<Qt::ToolButtonStyle>(s));
+        //Hack: Show lyrics by default. TODO: Remember the previous visibilities of all optionals and restore them.
+        m_lyrics->setVisible(true);
+        m_ui->actionLyrics->setChecked(true);
         m_firstShown = false;
     }
 }
